@@ -59,7 +59,7 @@ const getArtistByName = async (req, res) => {
           const mockData = JSON.parse(data);
           converter.json2csvAsync(mockData).then((csv) => {
             console.log(csv);
-            // For the case if  only the names must be returned
+            // ! For the case if  only the names must be returned
             // mockData.forEach((db) => {
             //   console.log(`${db.name}`);
             // });
