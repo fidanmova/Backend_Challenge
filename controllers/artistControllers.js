@@ -20,11 +20,11 @@ const getArtistByName = async (req, res) => {
     const data = await response.data;
     // console.log(data);
     res.send(data);
+
+    // ==> Task-2 ==> Write the result to a user-supplied CSV filename.The CSV file should include the following information (name, mbid, url, image_small image)
     // ! Specifying the search results in the data received.
     const artistsArray = await data.results.artistmatches.artist;
     // console.log(artistsArray);
-
-    // ==> Task-2 ==> Write the result to a user-supplied CSV filename.The CSV file should include the following information (name, mbid, url, image_small image)
     const artistsData = [];
     if (artistsArray.length > 0) {
       for (const artist of artistsArray) {
@@ -40,13 +40,16 @@ const getArtistByName = async (req, res) => {
         });
         // console.log(artistsData);
       }
+
+      // convert JSON array to CSV string
       converter.json2csv(artistsData, (err, csv) => {
         if (err) {
           throw err;
         }
         // console.log(csv);
-        // ! For writing all the data to the one CSV file use:
+        // ! For writing all the data to the one CSV I use:
         // fs.writeFileSync(`${FolderPath}/search/artistsArray.csv`, csv);
+        // ! For writing dynamic csv files based on specific names of the artist I use:
         fs.writeFileSync(`${FolderPath}/search/${searchParams}.csv`, csv);
         console.log(
           "csv file has been written successfully into Search Folder.".bgGreen
@@ -58,7 +61,7 @@ const getArtistByName = async (req, res) => {
         try {
           const mockData = JSON.parse(data);
           converter.json2csvAsync(mockData).then((csv) => {
-            console.log(csv);
+            // console.log(csv);
             // ! For the case if  only the names must be returned
             // mockData.forEach((db) => {
             //   console.log(`${db.name}`);
