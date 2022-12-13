@@ -20,7 +20,7 @@ const getArtistByName = async (req, res) => {
     const data = await response.data;
     // console.log(data);
     res.send(data);
-    //specifying the search results in the data received.
+    // ! Specifying the search results in the data received.
     const artistsArray = await data.results.artistmatches.artist;
     // console.log(artistsArray);
 
@@ -45,7 +45,7 @@ const getArtistByName = async (req, res) => {
           throw err;
         }
         // console.log(csv);
-        // for writing all the data to the one CSV file use:
+        // ! For writing all the data to the one CSV file use:
         // fs.writeFileSync(`${FolderPath}/search/artistsArray.csv`, csv);
         fs.writeFileSync(`${FolderPath}/search/${searchParams}.csv`, csv);
         console.log(
@@ -54,6 +54,20 @@ const getArtistByName = async (req, res) => {
       });
       // ==>> Task-3==>> If no results returned from the artist.search endpoint, retrieve random artist names from a JSON dictionary source
     } else {
+      fs.readFile("./mockdata.json", "utf8", (err, data) => {
+        try {
+          const mockData = JSON.parse(data);
+          converter.json2csvAsync(mockData).then((csv) => {
+            console.log(csv);
+            // For the case if  only the names must be returned
+            // mockData.forEach((db) => {
+            //   console.log(`${db.name}`);
+            // });
+          });
+        } catch (err) {
+          console.log(`Error reading file from disk: ${err}`.bgRed);
+        }
+      });
     }
   } catch (error) {
     console.log(error);
